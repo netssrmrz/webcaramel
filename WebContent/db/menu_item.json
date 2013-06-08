@@ -1,0 +1,7 @@
+[
+  { "id": 1, "title": "Home", "caption": "Sweet, sweet home", "url": "index.html" },
+  { "id": 2, "title": "About Us", "caption": "Find out who we are", "url": "about.html" },
+  { "id": 3, "title": "Skills", "caption": "What we can do", "url": "skills.html" },
+  { "id": 4, "title": "Portfolio", "caption": "What we've done", "url": "portfolio.html?id=1" },
+  { "id": 5, "title": "Contact Us", "caption": "How you can get in touch with us", "url": "contact.html" }
+]

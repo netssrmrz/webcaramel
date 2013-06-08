@@ -1,0 +1,271 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+  <title>Web Caramel - Home</title>
+  <link rel="stylesheet" href="styles/styles.css"/>
+  <script type="text/javascript" src="scripts/jquery-1.8.2.js"></script>
+  <script type="text/javascript" src="scripts/linq.js"></script>
+  <script type="text/javascript" src="scripts/lib.js"></script>
+  <script type="text/javascript" src="scripts/templates.js"></script>
+  <style>
+    #slideshow {
+      position:relative; 
+      display: inline-block;
+      xborder: 1px solid red;
+      height: 600px;
+      background-image: url("styles/images/content-shade.jpg");
+      background-position: center 461px;
+      background-repeat: no-repeat;
+      z-index: 900;
+    }
+    #c1 {
+      xborder-top: 10px solid white;
+      z-index:0;
+    }
+    #c1_caption {
+      position: absolute; 
+      left:0px; 
+      bottom:150px; 
+      z-index:1;
+      width: 70%; 
+      background: #FFF; 
+      opacity: 0.7;
+      padding-bottom: 16px;
+      padding-left: 30px;
+      padding-top: 20px;
+      text-align:left; 
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 11px;
+    }
+    #c1_caption_title {
+      color: #111;
+      margin-bottom: 5px;
+      line-height: 1.4;
+      letter-spacing: 1px;
+      font-family: 'Droid Serif', arial, serif;
+      font-size: 18px;
+      font-weight: 100;
+      display: block;
+    }
+    #c1_caption_content {
+      display: block;
+      line-height: 1.5;
+      color: #111;
+      font-size: 13px;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    #body_text {
+      box-shadow: none;
+      position: relative;
+      top: -70px;
+      z-index: 900;
+      background-color: #fbfbfb;
+    }
+
+    .control_default{
+      background: url('styles/images/default.png') no-repeat;
+    }
+    .control_selected {
+      background: url('styles/images/active.png') no-repeat;
+    }
+    #c1_controls {
+      position: absolute;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      outline: 0;
+      font-size: 13px;
+      vertical-align: baseline;
+      background: transparent;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #444444;
+      line-height: 1.6;
+    }
+    #c1_controls li {
+      position: relative;
+      float: left;
+      margin: 12px 3px 5px 3px;
+      display: block;
+      width: 20px;
+      height: 20px;
+      text-indent: -9999px;
+      cursor: pointer;
+      padding: 0;
+      border: 0;
+      outline: 0;
+      font-size: 13px;
+      vertical-align: baseline;
+      color: #444444;
+      line-height: 1.6;
+    }
+
+    #xfooter_content
+    {
+      height: 330px;
+      position: relative;
+      top: -110px;
+    }
+    #xfooter_content img 
+    {
+      border-radius: 4px;
+      margin-right: 30px;
+      margin-bottom: 25px;
+      box-shadow: 0px 0px 5px #111;
+    }
+    #xfooter_menu
+    {
+      position: relative;
+      top: -110px;
+    }
+    </style>
+  <script type="text/javascript">
+    function Init() {
+      var anim;
+
+      anim =
+      {
+        canvas_id: "c1",
+        caption_id: "c1_caption",
+        caption_title_id: "c1_caption_title",
+        caption_content_id: "c1_caption_content",
+        on_goo_start: Controls_Update,
+        imgs:
+        [
+          { url: "images/portfolio/showcase_1.jpg", caption_title: "ADHC Intranet Redesign", caption_content: "Creative design, hand-coded HTML, CSS layouts, and CMS integration." },
+          { url: "images/portfolio/showcase_2.jpg", caption_title: "Disability Council website", caption_content: "Creative design, hand-coded html templates using css layouts." },
+          { url: "images/portfolio/showcase_3.jpg", caption_title: "Learning Management System", caption_content: "Template customisation, palette selection" },
+          { url: "images/portfolio/showcase_10.jpg", caption_title: "Seniors Week Redesign", caption_content: "Template customisation, image slicing, hand-coded html and css layouts." },
+          { url: "images/portfolio/showcase_4.jpg", caption_title: "Don't Dis my Ability website", caption_content: "html templates, image slicing, ongoing maintenance" },
+          { url: "images/portfolio/showcase_5.jpg", caption_title: "Southern Highlands Vets", caption_content: "Hand-coded html, css layouts, ongoing maintenance" },
+          { url: "images/portfolio/showcase_6.jpg", caption_title: "Metaqua website", caption_content: "Hand-coded html templates, image slicing, flash banners and animation." },
+          { url: "images/portfolio/showcase_7.jpg", caption_title: "Margaret McCauley website", caption_content: "Hand-coded HTML and CSS layouts" },
+          { url: "images/portfolio/showcase_8.jpg", caption_title: "Iris Dental website", caption_content: "hand-coded html templates, css layouts" },
+          { url: "images/portfolio/showcase_9.jpg", caption_title: "Macquarie Street Centre website", caption_content: "hand-coded html templates, css layouts." },
+        ]
+      };
+
+      for (c = 0; c < anim.imgs.length; c++) {
+        elem = $("<li>")
+          .addClass("control_default")
+          .attr("goo_img", c)
+          .click(anim, Controls_Click);
+        $("#c1_controls").append(elem);
+      }
+
+      Goo_Draw(anim);
+    }
+
+    function Controls_Click(event)
+    {
+      Goo_Goto(event.data, parseInt($(this).attr("goo_img")));
+    }
+
+    function Controls_Update(goo)
+    {
+      var id;
+
+      $("#c1_controls li").removeClass().addClass("control_default");
+      id = "#c1_controls li:nth-child(" + (goo.curr_img + 1) + ")";
+      $(id).addClass("control_selected");
+    }
+
+    function Draw_Footer_Content()
+    {
+      var items, c, portfolio_item_table, portfolio_image_table, display_items, display_item_imgs;
+
+      portfolio_item_table = Get_JSON("db/portfolio_item.json");
+      portfolio_image_table = Get_JSON("db/portfolio_image.json");
+
+      display_items = Enumerable.From(portfolio_item_table)
+        .Where(function (x) { return x.recent_order!=null })
+        .OrderBy(function (x) { return x.recent_order })
+        .ToArray();
+      if (display_items != null)
+      {
+        items = "";
+        for (c = 0; c < display_items.length && c < 8; c++)
+        {
+          display_item_imgs = Enumerable.From(portfolio_image_table)
+            .Where(function (x) { return x.portfolio_item_id == display_items[c].id })
+            .OrderBy(function (x) { return x.recent_order })
+            .ToArray();
+          items += "<a href=\"portfolio.html?id=" + display_items[c].id + "\">"+
+            "<img src=\"" + display_item_imgs[0].thumbnail_url + "\" title=\"" + display_items[c].title + "\" width=\"80\" height=\"80\"></a>";
+          if (c == 3)
+            items += "<br>";
+        }
+      }
+      return items;
+    }
+    </script> 
+  </head>
+
+  <body onload="Init()">
+
+    <script>document.write(Draw_Header())</script>
+    <script>document.write(Draw_Menu())</script>
+
+    <div id="body">
+      <div id="slideshow">
+        <canvas id="c1" width="980" height="461"></canvas>
+        <span id="c1_caption">
+          <span id="c1_caption_title"></span>
+          <span id="c1_caption_content"></span>
+          </span>
+        <ul id="c1_controls"></ul>
+        </div>
+      <div id="body_text">
+        <div class="large">
+          <h3>Web Design with a difference</h3>
+          <p>Anyone can churn out WordPress websites, but it takes solid experience and creative ability to build, from the ground up, a website that is both aesthetically pleasing and functional. Usability and user-centred design are fundamental to our work ethos.</p>
+          <p>Starting with some thorough user analysis and a clear understanding of the business requirements, we are able to develop a project plan and detailed wireframes to get the web project rolling. Then comes the design process in which mockups are developed through close client consultation and early usability evaluations. Next is the development and building stage, which involves the 'slicing' of mockups and the creation of dynamic web templates for the implementation of a user-friendly content management system. Once the website is built, rigorous testing on various platforms follows to ensure a successful website launch. The final phase of the project involves post-production maintenance and enhancements, and is something that continues throughout the websites life cycle.</p>
+          <p>Our extensive experience in all aspects of web design ensures our projects are delivered on time and exceed client expectations.</p>
+          </div>
+        <div class="small">
+          <h2>About us</h2>
+          <p>We've been in the web design and development game for over 15 years and we're not stopping now.</p>
+          <a href="about.html">Find out more</a>
+          </div>
+        <div class="small">
+          <h2>Check out our portfolio</h2>
+          <p>Have a look at some of our work and read about how we were involved.</p>
+          <a href="portfolio.html?id=1">View the portfolio</a>
+          </div><br />
+        <div class="small">
+          <h2>Freelance work</h2>
+          <p>We're also available for small or odd jobs so feel free to contact us even if all you want is a single page update.</p>
+          <a href="contact.html">Contact us</a>
+          </div>
+        </div>
+      </div>
+
+    <div id="footer_content" style="display: none;">
+      <div class="footer_content_section">
+        <h1>Recent Web Projects</h1>
+        <hr />
+        <p>View some of our recent work here.</p>
+        <script>document.write(Draw_Footer_Content())</script>
+        </div>
+      <div class="footer_content_section">
+        <h1>Contact Us</h1>
+        <hr />
+        <form action="http://www.webcaramel.com/" method="post">
+          <input type="text" name="qname" id="qname" placeholder="Enter your name"/>
+          <input type="text" name="qemail" id="qemail" placeholder="Enter your email"/><br />
+          <textarea name="qmsg" id="qmsg" rows="" cols="" placeholder="Enter your message"></textarea><br />
+          <input type="submit" name="qsubmit" value="Send" id="qsubmit"/>
+          <input type="hidden" name="email" id="notify_email" value="netssrmrz@yahoo.com.au"/>
+          <input type="hidden" id="ajax_contact_path" value="http://www.webcaramel.com/wp-content/themes/echea/hades_framework/helper/contact_request.php"/>
+          </form>
+        </div>
+    </div>
+
+    <script>document.write(Draw_Portfolio_Footer())</script>
+    <script>document.write(Draw_Footer())</script>
+
+    </body>
+
+  </html>

@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Web Caramel - Laura's Career Summary</title>
+    <link rel="stylesheet" href="styles/styles.css"/>
+    <script type="text/javascript" src="scripts/jquery-1.8.2.js"></script>
+    <script type="text/javascript" src="scripts/linq.js"></script>
+    <script type="text/javascript" src="scripts/lib.js"></script>
+    <script type="text/javascript" src="scripts/templates.js"></script>
+    <xlink href='http://fonts.googleapis.com/css?family=Droid+Sans:900' rel='stylesheet' type='text/css'/>
+    <style>
+      .accordian
+      {
+        display: none;
+        padding: 20px 0px 0px 20px;
+      }
+      #body_text a
+      {
+        display: block;
+        width: 500px;
+        color: #444;
+      }
+      .title
+      {
+        font-weight: 600;
+        letter-spacing: -1px;
+        color: #333;
+        font-size: 13px;
+        font-family: Arial, Helvetica, sans-serif;
+        line-height: 1.6;
+      }
+      .text
+      {
+        font-size: 12px;
+        color: #444444;
+        font-family: Arial, Helvetica, sans-serif;
+        line-height: 1.6;
+      }
+      </style>
+    <script type="text/javascript">
+      function Link_On_Click(i)
+      {
+        var elems, c;
+
+        elems = $(".accordian");
+        if (Not_Empty(elems))
+          for (c = 0; c < elems.length; c++)
+            if (c==(i-1))
+              $(elems[c]).slideToggle();
+            else
+              $(elems[c]).slideUp();
+      }
+      </script> 
+  </head>
+
+  <body onload="">
+
+    <script>document.write(Draw_Header())</script>
+    <script>document.write(Draw_Menu())</script>
+
+    <div id="body">
+      <div id="body_text">
+        <h1>Laura's Career Summary</h1>
+
+        <a href="javascript:Link_On_Click(1)" style="float: none;">Sep 2010 - Current  /  Ageing, Disability and Home Care</a>
+        <div class="accordian">
+          <span class="title">Web Designer</span> <span class="text">- responsibilities include:</span>
+          <ul>
+            <li>Redeveloping the ADHC website, campaign websites and department intranet.</li>
+            <li>Web maintenance of all department websites and intranet.</li>
+            <li>Integrating the Squiz MySource Matrix content management system with new and existing websites.</li>
+            <li>Project management and analysis of business and user requirements.</li>
+            <li>Interface design and development, with close attention to corporate style guides, information architecture, usability and accessibility requirements.</li>
+            <li>Developing new procedures to improve quality standards and increase efficiency.</li>
+            <li>Liaising and providing guidance to business and communication units to ensure online content is kept up-to-date and suitable for web. Working closely with web developers and third party vendors to ensure online applications and projects meet requirements.</li>
+            <li>Documenting web specifications and procedures.</li>
+            <li>Assisting with User Acceptance Testing and usability evaluation.</li>
+            <li>Ensuring all web development complies with the W3C standards and accessibility guidelines.</li>
+            </ul>
+          </div>
+
+        <a href="javascript:Link_On_Click(2)" style="float: none;">Jun 2009 - Jul 2010  /  Highland Graphics</a>
+        <div class="accordian">
+          <span class="title">Web Designer</span> <span class="text">- responsibilities included:</span>
+          <ul>
+            <li>Updating web content on various commercial websites.</li>
+            <li>Designing and developing websites using Joomla!, Word Press and other content management systems.</li>
+            <li>Producing flash/gif animated banners and implementing jQuery plugins.</li>
+            </ul>
+          </div>
+
+        <a href="javascript:Link_On_Click(3)" style="float: none;">Jan 2004 - Sep 2008  /  Ageing, Disability and Home Care, Seniors Card</a>
+        <div class="accordian">
+          <span class="title">Web Designer</span> <span class="text">- responsibilities included:</span>
+          <ul>
+            <li>Web updates and maintenance of the Seniors Card website.</li>
+            <li>Interface design and development of various subsidiary websites, with close attention to corporate style guides, information architecture, usability and accessibility requirements.</li>
+            <li>Producing flash/gif animated banners and online demos.</li>
+            <li>Liaising with web developers to produce online forms and applications.</li>
+            <li>Documenting web specifications and procedures.</li>
+            <li>Assisting with User Acceptance Testing and usability evaluation.</li>
+            <li>Ensuring all web development complies with the W3C standards and accessibility guidelines.</li>
+            </ul>
+          </div>
+
+        <a href="javascript:Link_On_Click(4)" style="float: none;">Jan 2003 - Dec 2003  /  Office of State Revenue</a>
+        <div class="accordian">
+          <span class="title">Web Designer</span> <span class="text">- responsibilities included:</span>
+          <ul>
+            <li>Redeveloping the Office of State Revenue (OSR) and State Debt Recovery Office (SDRO) website and intranet.</li>
+            <li>Integrating the Oracle9iAS Portal content management system with existing and new websites.</li>
+            <li>Project management and analysis of business and user requirements.</li>
+            <li>Interface design and development, with close attention to corporate style guides, information architecture, usability and accessibility requirements.</li>
+            <li>Updating the OSR/SDRO websites and corporate intranet.</li>
+            <li>Liasing with business/communication units and web developers to ensure timely delivery of online projects.</li>
+            <li>Reviewing procedures and ensuring quality standards are maintained and improved.</li>
+            <li>Documenting web specifications and procedures.</li>
+            <li>Assisting with User Acceptance Testing and usability evaluation.</li>
+            <li>Ensuring all web development complies with the W3C standards and accessibility guidelines.</li>
+            </ul>
+          </div>
+
+        <a href="javascript:Link_On_Click(5)" style="float: none;">Oct 2002 - Nov 2002  /  Department of Ageing &amp; Disability, Seniors Card</a>
+        <div class="accordian">
+          <span class="title">Web Designer / Content Manager</span> <span class="text">- responsibilities included:</span>
+          <ul>
+            <li>Updating and maintaining the Seniors Card website and subsidiary websites.</li>
+            <li>Interface design and development, with close attention to corporate style guides, information architecture, usability and accessibility requirements.</li>
+            <li>Designing flash and gif animated banners.</li>
+            <li>Documenting web specifications and procedures.</li>
+            <li>Ensuring all web development complies with the W3C standards and accessibility guidelines.</li>
+            </ul>
+          </div>
+
+        <a href="javascript:Link_On_Click(6)" style="float: none;">Feb 1999 - Oct 2002  /  St.George Bank</a>
+        <div class="accordian">
+          <span class="title">Web Designer</span> <span class="text">- responsibilities included:</span>
+          <ul>
+            <li>Interface design, front-end development and maintenance of online applications and website content.</li>
+            <li>Designing and developing the St.George website and various subsidiary websites.</li>
+            <li>Producing flash online demos for internet banking.</li>
+            <li>Assisting with the implementation and integration of a new content management system on the existing websites.</li>
+            <li>Producing and documenting website procedures, wireframes and functional design specifications.</li>
+            <li>Liaising with business units and web developers to ensure timely delivery of web projects.</li>
+            <li>Assisting with User Acceptance Testing and usability evaluation.</li>
+            <li>Reviewing procedures and ensuring quality standards are maintained and constantly improved.</li>
+            <li>Researching current trends in web development and providing recommendations to senior management.</li>
+            </ul>
+          </div>
+
+        <a href="javascript:Link_On_Click(7)" style="float: none;">Oct 1997 - Dec 1998  /  RealNet Access</a>
+        <div class="accordian">
+          <span class="title">Front-end Web Developer</span> <span class="text">- responsibilities included:</span>
+          <ul>
+            <li>User interface design, front-end development and support of various online applications and websites.</li>
+            <li>Website development and template design, ensuring all files are optimised for the web and cross-browser compatible.</li>
+            <li>Web updates of major websites such as Getaway Online and Burkes Backyard.</li>
+            <li>Producing and documenting website procedures, wireframes and functional design specifications.</li>
+            <li>Usability evaluation and quality assurance testing.</li>
+            <li>Apply search engine optimisation techniques for improved website ranking.</li>
+            <li>Adhoc production department tasks as required.</li>
+            </ul>
+          </div>
+
+        </div>
+    </div>
+
+    <script>document.write(Draw_Portfolio_Footer())</script>
+    <script>document.write(Draw_Footer())</script>
+
+    </body>
+
+  </html>

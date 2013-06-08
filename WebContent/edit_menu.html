@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Web Caramel - Edit Menu</title>
+    <link rel="stylesheet" href="styles/styles.css"/>
+    <script type="text/javascript" src="scripts/jquery-1.8.2.js"></script>
+    <script type="text/javascript" src="scripts/linq.js"></script>
+    <script type="text/javascript" src="scripts/lib.js"></script>
+    <script type="text/javascript" src="scripts/db.js"></script>
+    <script type="text/javascript" src="scripts/templates.js"></script>
+    <script type="text/javascript">
+      function Body_On_Load()
+      {
+        table_Init("menu_table");
+        contextMenu_Init("contextMenu");
+        //searchDlg_Init("filters");
+        //editDlg_Init("editFields");
+
+        table_GetItems("menu_table", null);
+      }
+
+      function Get_Menu_Ids(filter)
+      {
+        return Select_Menu_Item_Ids();
+      }
+
+      function Update_Menu_Row(row, id)
+      {
+        var i;
+
+        i = Select_Menu_Item_By_Id(id);
+
+        row.children("td[colid=title]").html(ToString(i.title));
+        row.children("td[colid=caption]").html(ToString(i.caption));
+        row.children("td[colid=url]").html(ToString(i.url));
+      }
+
+      // Context Menu =============================================================
+
+      /*function contextMenu_EditItem(event, objId)
+      {
+        return systems.GetById(objId);
+      }*/
+
+      function On_Delete_MenuItem(event, objId)
+      {
+        return systems.Delete(objId);
+      }
+
+      /*function contextMenu_Errors_Click(event)
+      {
+        var id;
+
+        id = $("#contextMenu").attr("itemId");
+        window.open("Errors.shtm?sysid=" + id, "_top");
+      }*/
+
+      /*function contextMenu_Stats_Click(event)
+      {
+        var id;
+
+        id = $("#contextMenu").attr("itemId");
+        window.open("SystemStats.shtm?sysid=" + id, "_blank");
+      }*/
+    </script>
+    </head>
+
+  <body onload="Body_On_Load()">
+
+    <script>document.write(Draw_Header())</script>
+    <script>document.write(Draw_Menu())</script>
+
+    <div id="body">
+      <div id="body_text">
+
+        <ul id="contextMenu" class="contextMenu">
+          <li id="contextMenu_Add" adddlgid="editFields">Add</li>
+          <li id="contextMenu_Edit" editdlgid="editFields" onedititem="contextMenu_EditItem">Edit</li>
+          <li id="contextMenu_Del" ondeleteitem="On_Delete_MenuItem" updatetableid="menu_table">Delete</li>
+          <li id="contextMenu_Search" searchdlgid="filters">Search</li>
+          </ul>
+
+        <div inspagebuttons></div>
+        <table id="menu_table" ongetids="Get_Menu_Ids" onupdaterow="Update_Menu_Row">
+          <thead>
+            <tr><th>No.</th><th colid="title">Title</th><th colid="caption">Caption</th><th colid="url">URL</th></tr>
+            </thead>
+          <tbody>
+            </tbody>
+        </table>
+
+        </div>
+    </div>
+
+    <script>document.write(Draw_Portfolio_Footer())</script>
+    <script>document.write(Draw_Footer())</script>
+
+    </body>
+
+  </html>

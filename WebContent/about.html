@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Web Caramel - About Us</title>
+    <link rel="stylesheet" href="styles/styles.css"/>
+    <script type="text/javascript" src="scripts/jquery-1.8.2.js"></script>
+    <script type="text/javascript" src="scripts/linq.js"></script>
+    <script type="text/javascript" src="scripts/lib.js"></script>
+    <script type="text/javascript" src="scripts/templates.js"></script>
+    <xlink href='http://fonts.googleapis.com/css?family=Droid+Sans:900' rel='stylesheet' type='text/css'/>
+    <style>
+      .portrait
+      {
+        float: right;
+        border: 1px solid black;
+        margin: 20px 20px 20px 20px;
+        border-radius: 4px;
+        box-shadow: 0px 0px 3px #111;
+      }
+      .work
+      {
+        border: 1px solid black;
+        box-shadow: 0px 0px 3px #111;
+        width: 70px;
+        height: 70px;
+        margin: 30px 20px 0px 0px;
+      }
+      .link
+      {
+        display: inline-block;
+      }
+      </style>
+    <script type="text/javascript">
+      function Body_On_Load()
+      {
+        var anim;
+
+        anim =
+        {
+          canvas_id: "laura",
+          caption_id: null,
+          caption_title_id: null,
+          caption_content_id: null,
+          on_goo_start: null,
+          imgs:
+          [
+            { url: "images/laura/l1.png", caption_title: null, caption_content: null },
+            { url: "images/laura/l2.png", caption_title: null, caption_content: null },
+            { url: "images/laura/l3.png", caption_title: null, caption_content: null },
+            { url: "images/laura/l4.png", caption_title: null, caption_content: null }
+          ]
+        };
+        Goo_Draw(anim);
+
+        anim =
+        {
+          canvas_id: "steven",
+          caption_id: null,
+          caption_title_id: null,
+          caption_content_id: null,
+          on_goo_start: null,
+          imgs:
+          [
+            { url: "images/steven/s1.png", caption_title: null, caption_content: null },
+            { url: "images/steven/s2.png", caption_title: null, caption_content: null },
+            { url: "images/steven/s3.png", caption_title: null, caption_content: null },
+            { url: "images/steven/s4.png", caption_title: null, caption_content: null }
+          ]
+        };
+        Goo_Draw(anim);
+      }
+      </script> 
+  </head>
+
+  <body onload="Body_On_Load()">
+
+    <script>document.write(Draw_Header())</script>
+    <script>document.write(Draw_Menu())</script>
+
+    <div id="body">
+      <div id="body_text">
+        <h1>Lead Designer - Laura Akhurst</h1>
+        <canvas id="laura" class="portrait" width="256" height="256"></canvas>
+        <p>Hi, I’ve been in the web design industry for 14 years and it’s been an interesting journey. From humble beginnings, I started as a junior front-end developer in a small boutique design house. 
+          This was during the dot com boom when the launch parties were plentiful and the venture capital free flowing. It was a fantastic time in my work life and I was filled with the enthusiasm and 
+          wonder of a kid in a candy store. I was learning new concepts at a rapid rate and exposed to emerging technologies almost daily.</p>
+        <p>Sadly, the crash came as swiftly as the boom but my experience and training allowed me to move into the Banking industry and here I made lifelong friends that, to this day, I can still rely 
+          on. We often catch up over a drink and I’m always guaranteed a good laugh. Since then, I have worked in government agencies and additional web design outfits.</p>
+        <p>Having come from a humanities background I consider myself fortunate to have stumbled into a career in web design that I thoroughly enjoy. If I had to do it over again I wouldn't waste any 
+          time in pursuing a more direct path to my goal. It’s an industry which continually challenges me and one in which I have never stopped learning. There is something uniquely satisfying about 
+          seeing your ideas come to life on screen and even more so when you know they are up there for the world to see. As cliché as it sounds, the world wide web is my canvas and I am the artist.</p>
+        <p>What you can infer from this brief story of ‘occupational discovery’ is that I am a quiet achiever who works hard but loves to live life to the fullest. We spend most of our waking hours at 
+          work so we might as well enjoy it. I want to surround myself with smart, creative people who don't take themselves too seriously and are always up for a laugh. I love a workplace that 
+          encourages creativity and the personal development of its’ staff; has a commitment to developing projects that are well planned and organised; and is not afraid to push the boundaries.</p>
+        <a class="link" href="career.html" style="float: none;">View Laura's career summary</a>
+        <a class="link" href="documents/LauraAkhurst_CV2012.pdf" style="float: none;">View Laura's Résumé</a>
+
+        <h1>Lead Developer - Steven Ramirez</h1>
+        <canvas id="steven" class="portrait" width="256" height="256"></canvas>
+        <p>As both the techie and geek of the team I bring over 15 years experience as a Senior Web Programmer, Analyst, Architect, and Team Leader. This experience was gained across a variety of 
+          industries including Funds Management, Banking, Accounting, Superannuation, Media, and Entertainment. This also includes development right through a typical application's layers. From the User 
+          Interface to the business logic, and finally the backend database.</p>
+        <p>My education is, likewise, focused on IT with a Bachelor's Science Degree majoring in Computing Science and a Master's Degree in Information Technology. I haven't left it at that though with 
+          my interests now sharply focused on mobile development and the more interactive user interfaces that HTML5, CSS3, and JSON can afford.</p>
+        <p>I differentiate myself by refusing to be brainwashed into supporting unproven fad technologies that do not deliver quality or quantity for the client. It is common in this industry for 
+          development outfits to adopt new technologies purely on the basis of their popularity, wow factor, or sales brochures. This often results in solutions that are over-engineered, low in 
+          functionality, difficult to maintain, delayed, and costly. Of course, it isn't easy to see when a simple in-house solution can suffice if one doesn't have the skill for building it. This is 
+          where experience and a desire to do right by the client prove themselves invaluable.</p>
+        <p>I'm here to keep it real, keep it simple, and prove that, on the internet at least, you don't need a king's fortune to play with the big boys. Listed below are some of the companies I've worked at previously.</p>
+        <img src="images/work_anz.png" class="work" title="ANZ Funds Management" />
+        <img src="images/work_apn.png" class="work" title="APN Digital" />
+        <img src="images/work_bde.png" class="work" title="Brilliant Digital Entertainment" />
+        <img src="images/work_capgemini.png" class="work" title="Capgemini Argentina" />
+        <img src="images/work_deutsche.png" class="work" title="Deutsche Bank" />
+        <img src="images/work_ords.png" class="work" title="Ord Minnett" />
+        <img src="images/work_pillar.png" class="work" title="Pillar Administration" />
+        <img src="images/work_sybiz.png" class="work" title="Sybiz" />
+        <img src="images/work_uniloc.png" class="work" title="Uniloc" />
+        </div>
+    </div>
+
+    <script>document.write(Draw_Portfolio_Footer())</script>
+    <script>document.write(Draw_Footer())</script>
+
+    </body>
+
+  </html>
