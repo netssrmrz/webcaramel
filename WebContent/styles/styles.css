@@ -272,11 +272,11 @@
 }
 
 #footer_content {
-  background-position: center 0px, left 85px, left bottom, left 91px;
-  background-image: url("images/footer-abv-shade.png"),url("images/footer-content-top-border.png"), url("images/footer-content-bottom-border.png"), url("images/noise-texture-2.png");
-  background-repeat: no-repeat, repeat-x, repeat-x, repeat-x;
+  background-position: left 35px, left bottom, left 40px;
+  background-image: url("images/footer-content-top-border.png"), url("images/footer-content-bottom-border.png"), url("images/noise-texture-2.png");
+  background-repeat: repeat-x, repeat-x, repeat-x;
   background-color: #fbfbfb;
-  padding-top: 91px;
+  padding-top: 40px;
   padding-bottom: 6px;
   text-align: center;
 }
@@ -291,6 +291,7 @@
   display: inline-block;
   text-align: left;
   vertical-align: top;
+	padding-top: 8px;
 }
 
 #footer_content p {

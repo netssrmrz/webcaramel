@@ -4,85 +4,270 @@
   <head>
     <title>Web Caramel - Edit Menu</title>
     <link rel="stylesheet" href="styles/styles.css"/>
-    <script type="text/javascript" src="scripts/jquery-1.8.2.js"></script>
+    <script type="text/javascript" src="scripts/jquery.js"></script>
     <script type="text/javascript" src="scripts/linq.js"></script>
     <script type="text/javascript" src="scripts/lib.js"></script>
-    <script type="text/javascript" src="scripts/db.js"></script>
-    <script type="text/javascript" src="scripts/templates.js"></script>
+    <script type="text/javascript" src="scripts/db/Db_JSON.js"></script>
+    <script type="text/javascript" src="scripts/db/Db_Local.js"></script>
+    <script type="text/javascript" src="scripts/db/Db_Cache.js"></script>
+    <script type="text/javascript" src="scripts/dom/Menu_Item.js"></script>
+    <script type="text/javascript" src="scripts/dom/Portfolio_Item.js"></script>
+    <script type="text/javascript" src="scripts/dom/Portfolio_Image.js"></script>
+    <script type="text/javascript" src="scripts/ui/templates.js"></script>
+    <script type="text/javascript" src="scripts/ui/Table.js"></script>
+    <script type="text/javascript" src="scripts/ui/Context_Menu.js"></script>
+    <script type="text/javascript" src="scripts/ui/Edit_Dialog.js"></script>
+    <script type="text/javascript" src="scripts/ui/Add_Dialog.js"></script>
+    <style>
+      #menu_table .trOdd
+      {
+        background-color: #fff;
+      }
+      #menu_table tr
+      {
+        background-color: #eee;
+      }
+      
+      #context_menu
+      {
+        display: none; 
+        position: absolute;
+        background-color: rgba(0,0,0,0.8);
+        padding: 0px;
+        margin: 0px;
+        list-style-type: none;
+        box-shadow: 2px 2px 2px rgba(0,0,0,0.4);
+        border-top: 1px solid #999;
+        border-left: 1px solid #999;
+        border-bottom: 1px solid #222;
+        border-right: 1px solid #222;
+        z-index: 1;
+      }
+      #context_menu li
+      {
+        color: white;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        padding-left: 10px;
+        padding-right: 10px;
+        margin: 0px;
+      }
+      
+      .editFields
+      {
+        display: none; 
+        position: absolute;
+        background-color: rgba(0,0,0,0.8);
+        padding: 0px;
+        margin: 0px;
+        list-style-type: none;
+        box-shadow: 2px 2px 2px rgba(0,0,0,0.4);
+        border-top: 1px solid #999;
+        border-left: 1px solid #999;
+        border-bottom: 1px solid #222;
+        border-right: 1px solid #222;
+        z-index: 1;
+      }
+      .editFieldLabel
+      {
+        color: white;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        padding-left: 10px;
+        padding-right: 5px;
+        margin: 0px;
+        display: inline-block;
+        width: 50px;
+        text-align: right;
+      }
+      .editFields input
+      {
+        width: 200px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        margin-left: 5px;
+        margin-right: 10px;
+        padding: 0px;
+      }
+      .dialogTitle
+      {
+        color: white;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        padding-left: 10px;
+        padding-right: 10px;
+        margin: 0px;
+      }
+      .dialogButtons
+      {
+        padding-top: 5px;
+        padding-bottom: 5px;
+        padding-left: 10px;
+        padding-right: 10px;
+        margin: 0px;
+      }
+      </style>
     <script type="text/javascript">
+    
+      var db, menu_table, context_menu, edit_dlg, add_dlg;
+        
       function Body_On_Load()
       {
-        table_Init("menu_table");
-        contextMenu_Init("contextMenu");
-        //searchDlg_Init("filters");
-        //editDlg_Init("editFields");
+        menu_table = new Table("menu_table");
+        context_menu = new Context_Menu("context_menu");
+        edit_dlg = new Edit_Dialog("edit_dlg");
+        add_dlg = new Add_Dialog("add_dlg");
 
-        table_GetItems("menu_table", null);
+        db=new Db_Cache("webcaramel", 9, Db_Init_Success, null);
+      }
+      
+      function Db_Init_Success()
+      {
+   	    Draw_Header("header");
+        Draw_Menu(db, "menu");
+        Draw_Portfolio_Footer(db, "footer_content");
+   	    Draw_Footer(db, "footer_menu");
+   	    
+        db.Select_Ids("Menu_Item", Select_Menu_Ids_Success);
       }
 
-      function Get_Menu_Ids(filter)
+      function Select_Menu_Ids_Success(ids)
       {
-        return Select_Menu_Item_Ids();
+        // get filters
+        //filters=table_GetFilters();
+        
+        // apply filters
+        
+        // set filter desc
+        
+        // display menu items
+        menu_table.Set_Items(ids);
       }
 
       function Update_Menu_Row(row, id)
       {
-        var i;
-
-        i = Select_Menu_Item_By_Id(id);
-
-        row.children("td[colid=title]").html(ToString(i.title));
-        row.children("td[colid=caption]").html(ToString(i.caption));
-        row.children("td[colid=url]").html(ToString(i.url));
+        db.Select_Obj_By_Id("Menu_Item", id, Success);
+        function Success(obj)
+        {
+          row.children("td[colid=title]").html(ToString(obj.title));
+          row.children("td[colid=caption]").html(ToString(obj.caption));
+          row.children("td[colid=url]").html(ToString(obj.url));
+        }
       }
 
       // Context Menu =============================================================
 
-      /*function contextMenu_EditItem(event, objId)
+      function contextMenu_EditItem(id)
       {
-        return systems.GetById(objId);
-      }*/
-
-      function On_Delete_MenuItem(event, objId)
-      {
-        return systems.Delete(objId);
+        db.Select_Obj_By_Id("Menu_Item", parseInt(id), Success);
+        function Success(obj)
+        {
+          edit_dlg.Show(obj);
+        }
       }
 
-      /*function contextMenu_Errors_Click(event)
+      function contextMenu_DeleteItem(obj_id)
       {
-        var id;
+    	  db.Delete("Menu_Item", parseInt(obj_id), Success);
+    	  function Success()
+    	  {
+          setTimeout(Db_Init_Success, 10);
+    	  }
+      }
+      
+      // Edit Dialog =======================================================
 
-        id = $("#contextMenu").attr("itemId");
-        window.open("Errors.shtm?sysid=" + id, "_top");
-      }*/
-
-      /*function contextMenu_Stats_Click(event)
+      function editDlg_Save(obj)
       {
-        var id;
+        db.Save("Menu_Item", obj, Success);
+        function Success(new_obj)
+        {
+          setTimeout(Db_Init_Success, 10);
+        }
+      }
+      
+      // Add Dialog =======================================================
 
-        id = $("#contextMenu").attr("itemId");
-        window.open("SystemStats.shtm?sysid=" + id, "_blank");
-      }*/
+      function addDlg_Save(obj)
+      {
+        db.Save("Menu_Item", obj, Success);
+        function Success(new_obj)
+        {
+          setTimeout(Db_Init_Success, 10);
+        }
+      }
+
     </script>
     </head>
 
   <body onload="Body_On_Load()">
 
-    <script>document.write(Draw_Header())</script>
-    <script>document.write(Draw_Menu())</script>
+    <!-- Add Dialog ================================================================================================== -->
+
+    <div id="add_dlg" class="editFields">
+      <div class="dialogTitle">Add Menu Item</div>
+      <div>
+        <div class="editFieldLabel">Title</div>
+        <input id="editFields_title" type="text" objfield="title" />
+        </div>
+      <div>
+        <div class="editFieldLabel">Caption</div>
+        <input id="editFields_caption" type="text" objfield="caption" />
+        </div>
+      <div>
+        <div class="editFieldLabel">URL</div>
+        <input id="editFields_url" type="text" objfield="url">
+        </div>
+      <div class="dialogButtons">
+        <button onclickcancel>Cancel</button>
+        <button onclicksave="addDlg_Save">Save</button>
+        </div>
+      </div>
+
+    <!-- Edit Dialog ================================================================================================== -->
+
+    <div id="edit_dlg" class="editFields">
+      <div class="dialogTitle">Edit Menu Item</div>
+      <div>
+        <div class="editFieldLabel">Title</div>
+        <input id="editFields_title" type="text" objfield="title" />
+        </div>
+      <div>
+        <div class="editFieldLabel">Caption</div>
+        <input id="editFields_caption" type="text" objfield="caption" />
+        </div>
+      <div>
+        <div class="editFieldLabel">URL</div>
+        <input id="editFields_url" type="text" objfield="url">
+        </div>
+      <div class="dialogButtons">
+        <button onclickcancel>Cancel</button>
+        <button onclicksave="editDlg_Save">Save</button>
+        </div>
+      </div>
+
+    <!-- Context Menu ================================================================================================== -->
+
+    <ul id="context_menu" class="contextMenu">
+      <li id="contextMenu_Add" adddlgid="add_dlg">Add</li>
+      <li id="contextMenu_Edit" onedititem="contextMenu_EditItem">Edit</li>
+      <li id="contextMenu_Del" ondeleteitem="contextMenu_DeleteItem">Delete</li>
+      <li id="contextMenu_Del_Sel">Delete Selection</li>
+      <li id="contextMenu_Start_Sel">Start Selection</li>
+      <li id="contextMenu_End_Sel">End Selection</li>
+      <li id="contextMenu_Clear_Sel">Clear Selection</li>
+      </ul>
+
+    <!-- Page Content ================================================================================================== -->
+
+    <div id="header"></div>
+    <div id="menu"></div>
 
     <div id="body">
       <div id="body_text">
 
-        <ul id="contextMenu" class="contextMenu">
-          <li id="contextMenu_Add" adddlgid="editFields">Add</li>
-          <li id="contextMenu_Edit" editdlgid="editFields" onedititem="contextMenu_EditItem">Edit</li>
-          <li id="contextMenu_Del" ondeleteitem="On_Delete_MenuItem" updatetableid="menu_table">Delete</li>
-          <li id="contextMenu_Search" searchdlgid="filters">Search</li>
-          </ul>
-
-        <div inspagebuttons></div>
-        <table id="menu_table" ongetids="Get_Menu_Ids" onupdaterow="Update_Menu_Row">
+        <div xinspagebuttons></div>
+        <table id="menu_table" xongetids="Get_Menu_Ids" onupdaterow="Update_Menu_Row" contextmenu="context_menu">
           <thead>
             <tr><th>No.</th><th colid="title">Title</th><th colid="caption">Caption</th><th colid="url">URL</th></tr>
             </thead>
@@ -93,8 +278,8 @@
         </div>
     </div>
 
-    <script>document.write(Draw_Portfolio_Footer())</script>
-    <script>document.write(Draw_Footer())</script>
+    <div id="footer_content"></div>
+    <div id="footer_menu"></div>
 
     </body>
 

@@ -4,10 +4,16 @@
   <head>
     <title>Web Caramel - Contact Details</title>
     <link rel="stylesheet" href="styles/styles.css"/>
-    <script type="text/javascript" src="scripts/jquery-1.8.2.js"></script>
+    <script type="text/javascript" src="scripts/jquery.js"></script>
     <script type="text/javascript" src="scripts/linq.js"></script>
     <script type="text/javascript" src="scripts/lib.js"></script>
-    <script type="text/javascript" src="scripts/templates.js"></script>
+    <script type="text/javascript" src="scripts/db/Db_JSON.js"></script>
+    <script type="text/javascript" src="scripts/db/Db_Local.js"></script>
+    <script type="text/javascript" src="scripts/db/Db_Cache.js"></script>
+    <script type="text/javascript" src="scripts/dom/Menu_Item.js"></script>
+    <script type="text/javascript" src="scripts/dom/Portfolio_Item.js"></script>
+    <script type="text/javascript" src="scripts/dom/Portfolio_Image.js"></script>
+    <script type="text/javascript" src="scripts/ui/templates.js"></script>
     <style>
       table
       {
@@ -40,13 +46,19 @@
       }
       </style>
     <script type="text/javascript">
+    var db;
+    
+    function Body_On_Load()
+    {
+      db=new Db_Cache("webcaramel", 9, Draw_Templates, db);
+    }
       </script>
     </head>
 
-  <body onload="">
+  <body onload="Body_On_Load()">
 
-    <script>document.write(Draw_Header())</script>
-    <script>document.write(Draw_Menu())</script>
+    <div id="header"></div>
+    <div id="menu"></div>
 
     <div id="body">
       <div id="body_text">
@@ -77,8 +89,8 @@
         </div>
       </div>
 
-    <script>document.write(Draw_Portfolio_Footer())</script>
-    <script>document.write(Draw_Footer())</script>
+    <div id="footer_content"></div>
+    <div id="footer_menu"></div>
 
     </body>
 

@@ -4,10 +4,16 @@
   <head>
     <title>Web Caramel - About Us</title>
     <link rel="stylesheet" href="styles/styles.css"/>
-    <script type="text/javascript" src="scripts/jquery-1.8.2.js"></script>
+    <script type="text/javascript" src="scripts/jquery.js"></script>
     <script type="text/javascript" src="scripts/linq.js"></script>
     <script type="text/javascript" src="scripts/lib.js"></script>
-    <script type="text/javascript" src="scripts/templates.js"></script>
+    <script type="text/javascript" src="scripts/db/Db_JSON.js"></script>
+    <script type="text/javascript" src="scripts/db/Db_Local.js"></script>
+    <script type="text/javascript" src="scripts/db/Db_Cache.js"></script>
+    <script type="text/javascript" src="scripts/dom/Menu_Item.js"></script>
+    <script type="text/javascript" src="scripts/dom/Portfolio_Item.js"></script>
+    <script type="text/javascript" src="scripts/dom/Portfolio_Image.js"></script>
+    <script type="text/javascript" src="scripts/ui/templates.js"></script>
     <xlink href='http://fonts.googleapis.com/css?family=Droid+Sans:900' rel='stylesheet' type='text/css'/>
     <style>
       .portrait
@@ -32,6 +38,8 @@
       }
       </style>
     <script type="text/javascript">
+      var db;
+      
       function Body_On_Load()
       {
         var anim;
@@ -69,18 +77,20 @@
           ]
         };
         Goo_Draw(anim);
+
+        db=new Db_Cache("webcaramel", 9, Draw_Templates, db);
       }
       </script> 
   </head>
 
   <body onload="Body_On_Load()">
 
-    <script>document.write(Draw_Header())</script>
-    <script>document.write(Draw_Menu())</script>
+    <div id="header"></div>
+    <div id="menu"></div>
 
     <div id="body">
       <div id="body_text">
-        <h1>Lead Designer - Laura Akhurst</h1>
+        <h1>Lead Web Designer - Laura Akhurst</h1>
         <canvas id="laura" class="portrait" width="256" height="256"></canvas>
         <p>Hi, I’ve been in the web design industry for 14 years and it’s been an interesting journey. From humble beginnings, I started as a junior front-end developer in a small boutique design house. 
           This was during the dot com boom when the launch parties were plentiful and the venture capital free flowing. It was a fantastic time in my work life and I was filled with the enthusiasm and 
@@ -94,7 +104,7 @@
           work so we might as well enjoy it. I want to surround myself with smart, creative people who don't take themselves too seriously and are always up for a laugh. I love a workplace that 
           encourages creativity and the personal development of its’ staff; has a commitment to developing projects that are well planned and organised; and is not afraid to push the boundaries.</p>
         <a class="link" href="career.html" style="float: none;">View Laura's career summary</a>
-        <a class="link" href="documents/LauraAkhurst_CV2012.pdf" style="float: none;">View Laura's Résumé</a>
+        <a class="link" href="documents/LauraAkhurst_CV2012.pdf" style="float: none;">View Laura's CV</a>
 
         <h1>Lead Developer - Steven Ramirez</h1>
         <canvas id="steven" class="portrait" width="256" height="256"></canvas>
@@ -120,8 +130,8 @@
         </div>
     </div>
 
-    <script>document.write(Draw_Portfolio_Footer())</script>
-    <script>document.write(Draw_Footer())</script>
+    <div id="footer_content"></div>
+    <div id="footer_menu"></div>
 
     </body>
 

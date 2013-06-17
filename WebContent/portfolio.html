@@ -4,10 +4,16 @@
   <head>
     <title>Web Caramel - Portfolio</title>
     <link rel="stylesheet" href="styles/styles.css"/>
-    <script type="text/javascript" src="scripts/jquery-1.8.2.js"></script>
+    <script type="text/javascript" src="scripts/jquery.js"></script>
     <script type="text/javascript" src="scripts/linq.js"></script>
     <script type="text/javascript" src="scripts/lib.js"></script>
-    <script type="text/javascript" src="scripts/templates.js"></script>
+    <script type="text/javascript" src="scripts/db/Db_JSON.js"></script>
+    <script type="text/javascript" src="scripts/db/Db_Local.js"></script>
+    <script type="text/javascript" src="scripts/db/Db_Cache.js"></script>
+    <script type="text/javascript" src="scripts/dom/Portfolio_Item.js"></script>
+    <script type="text/javascript" src="scripts/dom/Portfolio_Image.js"></script>
+    <script type="text/javascript" src="scripts/dom/Menu_Item.js"></script>
+    <script type="text/javascript" src="scripts/ui/templates.js"></script>
     <style>
       #main_img
       {
@@ -66,160 +72,105 @@
       }
     </style>
     <script type="text/javascript">
-
+    
+      var db;
+    
       // UI functions =======================================================================================================================================
 
       function On_Load_Body()
       {
+        var x;
+        
         x = Get_Request_Parameter("x");
         if (x != null)
           $("#img_grp").css("left", x+"px");
+
+        db=new Db_Cache("webcaramel", 9, Db_Cache_Success);
+        function Db_Cache_Success()
+        {
+        	var portfolio_item_id;
+        	
+          Draw_Templates(db);
+          
+          portfolio_item_id = parseInt(Get_Request_Parameter("id"));
+          Portfolio_Item.Get_Portfolio_By_Id(db, portfolio_item_id, Get_Portfolio_By_Id_Success);
+          function Get_Portfolio_By_Id_Success(portfolio_item)
+          {
+            Draw_Portfolio_Image(db, "img_frame", portfolio_item);
+            $("#portfolio_title").html(portfolio_item.title);
+            Draw_Portfolio_Thumbnails(db, "other_imgs", portfolio_item);
+            $("#portfolio_description").html(portfolio_item.description);
+            $("#portfolio_website_button").html("<a href=\""+portfolio_item.website_url+"\" >Visit website</a>");
+          }
+        }
+      }
+
+      function Draw_Portfolio_Image(db, id, portfolio_item)
+      {
+        var portfolio_item_id;
+
+        portfolio_item.Get_Portfolio_Images(db, Get_Portfolio_Images_Success);
+        function Get_Portfolio_Images_Success(items)
+        {
+          var html;
+
+          if (Not_Empty(items) && Not_Empty(id))
+          {
+            html = "<img id=\"main_img\" src=\"" + items[0].image_url + "\" >";
+            $("#"+id).html(html);
+          }
+        }
+      }
+
+      function Draw_Portfolio_Thumbnails(db, id, portfolio_item)
+      {
+    	  portfolio_item.Get_Portfolio_Images(db, Get_Portfolio_Images_Success);
+        function Get_Portfolio_Images_Success(items)
+        {
+        	var html="", c;
+        	
+          if (Not_Empty(items))
+          {
+            for (c = 0; c < items.length; c++)
+              if (c==0)
+            	  html += "<img class=\"thumbnails img_selected\" src=\"" + items[c].thumbnail_url + "\" onclick=\"On_Thumbnail_Selected(this, " + items[c].id + ")\" >";
+              else
+            	  html += "<img class=\"thumbnails\" src=\"" + items[c].thumbnail_url + "\" onclick=\"On_Thumbnail_Selected(this, " + items[c].id + ")\" >";
+            $("#"+id).html(html);
+          }
+        }
       }
 
       function On_Thumbnail_Selected(this_elem, id)
       {
-        var item;
-
-        item = Get_Portfolio_Image_By_Id(id);
-        if (Not_Empty(item))
+        Portfolio_Image.Get_Portfolio_Image_By_Id(db, id, Get_Portfolio_Image_By_Id_Success);
+        function Get_Portfolio_Image_By_Id_Success(item)
         {
           $("img.thumbnails").removeClass("img_selected");
           $(this_elem).addClass("img_selected");
           $("#main_img").attr("src", item.image_url);
         }
       }
-
-      function Draw_Portfolio_Image()
-      {
-        var id, res = "", items;
-
-        id = Get_Request_Parameter("id");
-        items = Get_Portolio_Images(id);
-        if (Not_Empty(items))
-          res = "<img id=\"main_img\" src=\"" + items[0].image_url + "\" >";
-        return res;
-      }
-
-      function Draw_Portfolio_Thumbnails()
-      {
-        var id, res = "", items, c;
-
-        id = Get_Request_Parameter("id");
-        items = Get_Portolio_Images(id);
-        if (Not_Empty(items))
-        {
-          for (c = 0; c < items.length; c++)
-            if (c==0)
-              res += "<img class=\"thumbnails img_selected\" src=\"" + items[c].thumbnail_url + "\" onclick=\"On_Thumbnail_Selected(this, " + items[c].id + ")\" >";
-          else
-              res += "<img class=\"thumbnails\" src=\"" + items[c].thumbnail_url + "\" onclick=\"On_Thumbnail_Selected(this, " + items[c].id + ")\" >";
-        }
-        return res;
-      }
-
-      function Draw_Portfolio_Description()
-      {
-        var id, res = "", item;
-
-        id = Get_Request_Parameter("id");
-        item = Get_Portfolio_By_Id(id);
-        if (Not_Empty(item))
-          res = item.description;
-        return res;
-      }
-
-      function Draw_Portfolio_Title()
-      {
-        var id, res = "", item;
-
-        id = Get_Request_Parameter("id");
-        item = Get_Portfolio_By_Id(id);
-        if (Not_Empty(item))
-          res = item.title;
-        return res;
-      }
-
-      function Draw_Portfolio_Website_Button()
-      {
-        var id, res = "", item;
-
-        id = Get_Request_Parameter("id");
-        item = Get_Portfolio_By_Id(id);
-        if (Not_Empty(item) && Not_Empty(item.website_url))
-          res = "<a href=\""+item.website_url+"\" >Visit website</a>";
-        return res;
-      }
-
-      // Db functions =======================================================================================================================================
-
-      function Get_Portolio_Images(id)
-      {
-        var id, res = null, table, items;
-
-        if (id != null)
-        {
-          table = Get_JSON("db/portfolio_image.json");
-          items = Enumerable.From(table)
-            .Where(function (x) { return x.portfolio_item_id == id })
-            .ToArray();
-          if (Not_Empty(items))
-            res = items;
-        }
-        return res;
-      }
-
-      function Get_Portfolio_Image_By_Id(id)
-      {
-        var id, res = null, table, items;
-
-        if (id != null)
-        {
-          table = Get_JSON("db/portfolio_image.json");
-          items = Enumerable
-            .From(table)
-            .Where(function (x) { return x.id == id })
-            .ToArray();
-          if (Not_Empty(items))
-            res = items[0];
-        }
-        return res;
-      }
-
-      function Get_Portfolio_By_Id(id)
-      {
-        var id, res = null, table, items;
-
-        if (id != null)
-        {
-          table = Get_JSON("db/portfolio_item.json");
-          items = Enumerable.From(table)
-            .Where(function (x) { return x.id == id })
-            .ToArray();
-          if (Not_Empty(items))
-            res = items[0];
-        }
-        return res;
-      }
     </script>
     </head>
 
   <body onload="On_Load_Body()">
 
-    <script>document.write(Draw_Header())</script>
-    <script>document.write(Draw_Menu())</script>
+    <div id="header"></div>
+    <div id="menu"></div>
 
     <div id="body">
       <div id="body_text">
-        <div id="img_frame"><script>document.write(Draw_Portfolio_Image())</script></div>
-        <h1><script>document.write(Draw_Portfolio_Title())</script></h1>
-        <div id="other_imgs"><script>document.write(Draw_Portfolio_Thumbnails())</script></div>
-        <script>document.write(Draw_Portfolio_Description())</script>
-        <script>document.write(Draw_Portfolio_Website_Button())</script>
+        <div id="img_frame"></div>
+        <h1 id="portfolio_title"></h1>
+        <div id="other_imgs"></div>
+        <span id="portfolio_description"></span>
+        <span id="portfolio_website_button"></span>
         </div>
       </div>
 
-    <script>document.write(Draw_Portfolio_Footer())</script>
-    <script>document.write(Draw_Footer())</script>
+    <div id="footer_content"></div>
+    <div id="footer_menu"></div>
 
     </body>
 

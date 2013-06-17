@@ -4,10 +4,16 @@
   <head>
   <title>Web Caramel - Home</title>
   <link rel="stylesheet" href="styles/styles.css"/>
-  <script type="text/javascript" src="scripts/jquery-1.8.2.js"></script>
-  <script type="text/javascript" src="scripts/linq.js"></script>
-  <script type="text/javascript" src="scripts/lib.js"></script>
-  <script type="text/javascript" src="scripts/templates.js"></script>
+    <script type="text/javascript" src="scripts/jquery.js"></script>
+    <script type="text/javascript" src="scripts/linq.js"></script>
+    <script type="text/javascript" src="scripts/lib.js"></script>
+    <script type="text/javascript" src="scripts/db/Db_JSON.js"></script>
+    <script type="text/javascript" src="scripts/db/Db_Local.js"></script>
+    <script type="text/javascript" src="scripts/db/Db_Cache.js"></script>
+    <script type="text/javascript" src="scripts/dom/Menu_Item.js"></script>
+    <script type="text/javascript" src="scripts/dom/Portfolio_Item.js"></script>
+    <script type="text/javascript" src="scripts/dom/Portfolio_Image.js"></script>
+    <script type="text/javascript" src="scripts/ui/templates.js"></script>
   <style>
     #slideshow {
       position:relative; 
@@ -22,6 +28,7 @@
     #c1 {
       xborder-top: 10px solid white;
       z-index:0;
+      cursor: pointer;
     }
     #c1_caption {
       position: absolute; 
@@ -122,6 +129,8 @@
     }
     </style>
   <script type="text/javascript">
+    var db;
+    
     function Init() {
       var anim;
 
@@ -134,16 +143,16 @@
         on_goo_start: Controls_Update,
         imgs:
         [
-          { url: "images/portfolio/showcase_1.jpg", caption_title: "ADHC Intranet Redesign", caption_content: "Creative design, hand-coded HTML, CSS layouts, and CMS integration." },
-          { url: "images/portfolio/showcase_2.jpg", caption_title: "Disability Council website", caption_content: "Creative design, hand-coded html templates using css layouts." },
-          { url: "images/portfolio/showcase_3.jpg", caption_title: "Learning Management System", caption_content: "Template customisation, palette selection" },
-          { url: "images/portfolio/showcase_10.jpg", caption_title: "Seniors Week Redesign", caption_content: "Template customisation, image slicing, hand-coded html and css layouts." },
-          { url: "images/portfolio/showcase_4.jpg", caption_title: "Don't Dis my Ability website", caption_content: "html templates, image slicing, ongoing maintenance" },
-          { url: "images/portfolio/showcase_5.jpg", caption_title: "Southern Highlands Vets", caption_content: "Hand-coded html, css layouts, ongoing maintenance" },
-          { url: "images/portfolio/showcase_6.jpg", caption_title: "Metaqua website", caption_content: "Hand-coded html templates, image slicing, flash banners and animation." },
-          { url: "images/portfolio/showcase_7.jpg", caption_title: "Margaret McCauley website", caption_content: "Hand-coded HTML and CSS layouts" },
-          { url: "images/portfolio/showcase_8.jpg", caption_title: "Iris Dental website", caption_content: "hand-coded html templates, css layouts" },
-          { url: "images/portfolio/showcase_9.jpg", caption_title: "Macquarie Street Centre website", caption_content: "hand-coded html templates, css layouts." },
+          { url: "images/portfolio/showcase_1.jpg",  link_url: "portfolio.html?id=1",  caption_title: "ADHC Intranet Redesign",          caption_content: "Creative design, hand-coded HTML, CSS layouts, and CMS integration." },
+          { url: "images/portfolio/showcase_2.jpg",  link_url: "portfolio.html?id=2",  caption_title: "Disability Council website",      caption_content: "Creative design, hand-coded html templates using css layouts." },
+          { url: "images/portfolio/showcase_3.jpg",  link_url: null,                   caption_title: "Learning Management System",      caption_content: "Template customisation, palette selection" },
+          { url: "images/portfolio/showcase_10.jpg", link_url: "portfolio.html?id=4",  caption_title: "Seniors Week Redesign",           caption_content: "Template customisation, image slicing, hand-coded html and css layouts." },
+          { url: "images/portfolio/showcase_4.jpg",  link_url: "portfolio.html?id=3",  caption_title: "Don't Dis my Ability website",    caption_content: "html templates, image slicing, ongoing maintenance" },
+          { url: "images/portfolio/showcase_5.jpg",  link_url: "portfolio.html?id=12", caption_title: "Southern Highlands Vets",         caption_content: "Hand-coded html, css layouts, ongoing maintenance" },
+          { url: "images/portfolio/showcase_6.jpg",  link_url: "portfolio.html?id=10", caption_title: "Metaqua website",                 caption_content: "Hand-coded html templates, image slicing, flash banners and animation." },
+          { url: "images/portfolio/showcase_7.jpg",  link_url: "portfolio.html?id=9",  caption_title: "Margaret McCauley website",       caption_content: "Hand-coded HTML and CSS layouts" },
+          { url: "images/portfolio/showcase_8.jpg",  link_url: "portfolio.html?id=8",  caption_title: "Iris Dental website",             caption_content: "hand-coded html templates, css layouts" },
+          { url: "images/portfolio/showcase_9.jpg",  link_url: "portfolio.html?id=11", caption_title: "Macquarie Street Centre website", caption_content: "hand-coded html templates, css layouts." },
         ]
       };
 
@@ -154,10 +163,25 @@
           .click(anim, Controls_Click);
         $("#c1_controls").append(elem);
       }
+      
+      $("#c1").click(anim, Canvas_Click)
 
       Goo_Draw(anim);
+      
+      db=new Db_Cache("webcaramel", 9, Draw_Templates, db);
     }
 
+    function Canvas_Click(event)
+    {
+    	var anim, goo_img, link_url;
+    	
+    	anim=event.data;
+    	goo_img=parseInt($(this).attr("goo_img"));
+    	link_url=anim.imgs[goo_img].link_url;
+    	if (Not_Empty(link_url))
+    	  window.open(link_url, "_self");
+    }
+    
     function Controls_Click(event)
     {
       Goo_Goto(event.data, parseInt($(this).attr("goo_img")));
@@ -170,6 +194,8 @@
       $("#c1_controls li").removeClass().addClass("control_default");
       id = "#c1_controls li:nth-child(" + (goo.curr_img + 1) + ")";
       $(id).addClass("control_selected");
+      
+      $("#c1").attr("goo_img", goo.curr_img);
     }
 
     function Draw_Footer_Content()
@@ -205,8 +231,8 @@
 
   <body onload="Init()">
 
-    <script>document.write(Draw_Header())</script>
-    <script>document.write(Draw_Menu())</script>
+    <div id="header"></div>
+    <div id="menu"></div>
 
     <div id="body">
       <div id="slideshow">
@@ -219,10 +245,11 @@
         </div>
       <div id="body_text">
         <div class="large">
-          <h3>Web Design with a difference</h3>
+          <h3>Just add Caramel</h3>
           <p>Anyone can churn out WordPress websites, but it takes solid experience and creative ability to build, from the ground up, a website that is both aesthetically pleasing and functional. Usability and user-centred design are fundamental to our work ethos.</p>
           <p>Starting with some thorough user analysis and a clear understanding of the business requirements, we are able to develop a project plan and detailed wireframes to get the web project rolling. Then comes the design process in which mockups are developed through close client consultation and early usability evaluations. Next is the development and building stage, which involves the 'slicing' of mockups and the creation of dynamic web templates for the implementation of a user-friendly content management system. Once the website is built, rigorous testing on various platforms follows to ensure a successful website launch. The final phase of the project involves post-production maintenance and enhancements, and is something that continues throughout the websites life cycle.</p>
-          <p>Our extensive experience in all aspects of web design ensures our projects are delivered on time and exceed client expectations.</p>
+          <p>Our extensive experience in all aspects of web design ensures our projects are delivered on time and above client expectations. If you want  to caramalise your website today just give us a call.</p>
+          <p><a href="contact.html">Contact us</a></p>
           </div>
         <div class="small">
           <h2>About us</h2>
@@ -242,12 +269,12 @@
         </div>
       </div>
 
-    <div id="footer_content" style="display: none;">
+    <div id="xfooter_content" style="display: none;">
       <div class="footer_content_section">
         <h1>Recent Web Projects</h1>
         <hr />
         <p>View some of our recent work here.</p>
-        <script>document.write(Draw_Footer_Content())</script>
+        <script>/*document.write(Draw_Footer_Content())*/</script>
         </div>
       <div class="footer_content_section">
         <h1>Contact Us</h1>
@@ -263,8 +290,8 @@
         </div>
     </div>
 
-    <script>document.write(Draw_Portfolio_Footer())</script>
-    <script>document.write(Draw_Footer())</script>
+    <div id="footer_content"></div>
+    <div id="footer_menu"></div>
 
     </body>
 
