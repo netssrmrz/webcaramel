@@ -7,7 +7,8 @@ function Get_JSON(url)
     dataType: "json",
     url: url,
     success: function (data) { res = data; },
-    async: false
+    async: false,
+    cache: false
   });
   return res;
 }

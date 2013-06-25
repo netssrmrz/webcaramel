@@ -3,7 +3,7 @@ function Draw_Menu(db, id)
 {
   if (Elem_Exists(id))
   {
-	Menu_Item.Get_Menu_Items(db, Get_Menu_Items_Success);
+	Menu_Item.Get_Menu_Items(db, //Get_Menu_Items_Success);
     function Get_Menu_Items_Success(menu_items)
     {
       var c, items="", html;
@@ -15,16 +15,17 @@ function Draw_Menu(db, id)
           items +=
             "<li>" +
             "<a href=\"" + menu_items[c].url + "\">" +
-            "<span class=\"menu_title\">" + menu_items[c].title + "</span>" +
-            "<br />" +
-            "<span class=\"menu_details\">" + menu_items[c].caption + "</span>" +
+            "<span class=\"menu_title\">" + menu_items[c].title + "</span>";
+          if (Not_Empty(menu_items[c].caption))
+            items += "<br /><span class=\"menu_details\">" + menu_items[c].caption + "</span>";
+          items +=
             "</a>" +
             "</li>";
         }
         html = "<ul>" + items + "</ul>";
         $("#"+id).html(html);
       }
-    }
+    });
   }
 }
 
@@ -32,7 +33,7 @@ function Draw_Footer(db, id)
 {
   if (Elem_Exists(id))
   {
-	Menu_Item.Get_Menu_Items(db, Get_Menu_Items_Success);
+	Menu_Item.Get_Menu_Items(db, //Get_Menu_Items_Success);
     function Get_Menu_Items_Success(menu_items)
     {
       var html, items = "", c;
@@ -48,7 +49,7 @@ function Draw_Footer(db, id)
         html = items;
         $("#"+id).html(html);
       }
-    }
+    });
   }
 }
 
@@ -80,7 +81,7 @@ function Draw_Portfolio_Footer(db, id)
 {
   if (Elem_Exists(id))
   {
-	Portfolio_Item.Get_Portfolio_Items_and_Main_Images(db, Success);
+	Portfolio_Item.Get_Portfolio_Items_and_Main_Images(db, //Success);
     function Success(items)
     {
       var html = "", c;
@@ -100,7 +101,7 @@ function Draw_Portfolio_Footer(db, id)
           "</div>" +
         "<img src=\"images/slider-next.png\" class=\"control\" onclick=\"Portfolio_Footer_Next_Click(this)\" />";
       $("#"+id).html(html);
-    }
+    });
   }
 }
 

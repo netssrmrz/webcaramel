@@ -10,6 +10,7 @@
     <script type="text/javascript" src="scripts/db/Db_JSON.js"></script>
     <script type="text/javascript" src="scripts/db/Db_Local.js"></script>
     <script type="text/javascript" src="scripts/db/Db_Cache.js"></script>
+    <script type="text/javascript" src="scripts/db/Sys_Table.js"></script>
     <script type="text/javascript" src="scripts/dom/Menu_Item.js"></script>
     <script type="text/javascript" src="scripts/dom/Portfolio_Item.js"></script>
     <script type="text/javascript" src="scripts/dom/Portfolio_Image.js"></script>
@@ -19,13 +20,75 @@
     <script type="text/javascript" src="scripts/ui/Edit_Dialog.js"></script>
     <script type="text/javascript" src="scripts/ui/Add_Dialog.js"></script>
     <style>
-      #menu_table .trOdd
+      #body_text
       {
-        background-color: #fff;
+        xtext-align: center;
       }
-      #menu_table tr
+      
+      .table
       {
-        background-color: #eee;
+        margin-top: 16px;
+        margin-bottom: 16px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 0px;
+        border: 0px;
+        border-spacing: 0;
+        border-collapse: collapse;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 13px;
+      }
+      .table .title
+      {
+        background-color: transparent;
+        color: #000;
+      }
+      .table thead tr
+      {
+        background-color: #555;
+        color: #fff;
+      }
+      .table thead th
+      {
+        margin: 0px;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+      .table .trOdd
+      {
+        xbackground-color: #fff;
+        xmargin: 0px;
+        xpadding: 0px;
+        xborder: 0px;
+        xborder-bottom: 1px solid #ccc;
+      }
+      .table tbody tr
+      {
+        xbackground-color: #eee;
+        xmargin: 0px;
+        xpadding: 0px;
+        xborder: 0px;
+        xborder-spacing: 0;
+        xborder-collapse: collapse;
+        border-bottom: 1px solid #eee;
+      }
+      .table tbody tr:hover
+      {
+        background-color: #cfc;
+        xcolor: #0f0;
+      }
+      .table td
+      {
+        margin: 0px;
+        padding-top: 4px;
+        padding-bottom: 4px;
+        padding-left: 16px;
+        padding-right: 16px;
+        xborder: 0px;
+        xborder-spacing: 0;
+        xborder-collapse: collapse;
       }
       
       #context_menu
@@ -42,6 +105,8 @@
         border-bottom: 1px solid #222;
         border-right: 1px solid #222;
         z-index: 1;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 10px;
       }
       #context_menu li
       {
@@ -51,6 +116,10 @@
         padding-left: 10px;
         padding-right: 10px;
         margin: 0px;
+      }
+      #context_menu li:hover
+      {
+        background-color: rgba(0,255,0,0.2);
       }
       
       .editFields
@@ -67,6 +136,8 @@
         border-bottom: 1px solid #222;
         border-right: 1px solid #222;
         z-index: 1;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 13px;
       }
       .editFieldLabel
       {
@@ -146,55 +217,43 @@
 
       function Update_Menu_Row(row, id)
       {
-        db.Select_Obj_By_Id("Menu_Item", id, Success);
+        db.Select_Obj_By_Id("Menu_Item", id, //Success);
         function Success(obj)
         {
           row.children("td[colid=title]").html(ToString(obj.title));
           row.children("td[colid=caption]").html(ToString(obj.caption));
           row.children("td[colid=url]").html(ToString(obj.url));
-        }
+        });
       }
 
       // Context Menu =============================================================
 
       function contextMenu_EditItem(id)
       {
-        db.Select_Obj_By_Id("Menu_Item", parseInt(id), Success);
+        db.Select_Obj_By_Id("Menu_Item", parseInt(id), //Success);
         function Success(obj)
         {
           edit_dlg.Show(obj);
-        }
+        });
       }
 
       function contextMenu_DeleteItem(obj_id)
       {
-    	  db.Delete("Menu_Item", parseInt(obj_id), Success);
-    	  function Success()
-    	  {
-          setTimeout(Db_Init_Success, 10);
-    	  }
+    	  db.Delete("Menu_Item", parseInt(obj_id), Db_Init_Success);
       }
       
       // Edit Dialog =======================================================
 
       function editDlg_Save(obj)
       {
-        db.Save("Menu_Item", obj, Success);
-        function Success(new_obj)
-        {
-          setTimeout(Db_Init_Success, 10);
-        }
+        db.Save("Menu_Item", obj, Db_Init_Success);
       }
       
       // Add Dialog =======================================================
 
       function addDlg_Save(obj)
       {
-        db.Save("Menu_Item", obj, Success);
-        function Success(new_obj)
-        {
-          setTimeout(Db_Init_Success, 10);
-        }
+        db.Save("Menu_Item", obj, Db_Init_Success);
       }
 
     </script>
@@ -252,10 +311,6 @@
       <li id="contextMenu_Add" adddlgid="add_dlg">Add</li>
       <li id="contextMenu_Edit" onedititem="contextMenu_EditItem">Edit</li>
       <li id="contextMenu_Del" ondeleteitem="contextMenu_DeleteItem">Delete</li>
-      <li id="contextMenu_Del_Sel">Delete Selection</li>
-      <li id="contextMenu_Start_Sel">Start Selection</li>
-      <li id="contextMenu_End_Sel">End Selection</li>
-      <li id="contextMenu_Clear_Sel">Clear Selection</li>
       </ul>
 
     <!-- Page Content ================================================================================================== -->
@@ -267,13 +322,24 @@
       <div id="body_text">
 
         <div xinspagebuttons></div>
-        <table id="menu_table" xongetids="Get_Menu_Ids" onupdaterow="Update_Menu_Row" contextmenu="context_menu">
+        <table id="menu_table" xongetids="Get_Menu_Ids" onupdaterow="Update_Menu_Row" contextmenu="context_menu" class="table">
           <thead>
+            <tr class="title"><th colspan="4"><h1>Menu Items</h1></th></tr>
             <tr><th>No.</th><th colid="title">Title</th><th colid="caption">Caption</th><th colid="url">URL</th></tr>
             </thead>
           <tbody>
             </tbody>
         </table>
+        
+        <h1>Instructions</h1>
+        <p>To Add a Menu Item - Click on any row to display the menu and select "Add".</p>
+        <p>To Edit a Menu Item - Click on the row of the menu item you wish to change and select "Edit" from the menu.</p>
+        <p>To Delete a Menu Item - Click on the row of the menu item you wish to delete and select "Delete" from the menu.</p>
+        
+        <h1>Notes</h1>
+        <p>The "Title" and "Caption" fields can include any HTML as part of the text.</p>
+        <p>The "URL" field must contain a full URL if the link is that of an external site. For example, a link to the Google website should look like "http://www.google.com".
+        Internal links to local website pages do not require a full URL. For example, a link to the home page could look like "index.html".</p>
 
         </div>
     </div>

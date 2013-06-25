@@ -10,6 +10,7 @@
     <script type="text/javascript" src="scripts/db/Db_JSON.js"></script>
     <script type="text/javascript" src="scripts/db/Db_Local.js"></script>
     <script type="text/javascript" src="scripts/db/Db_Cache.js"></script>
+    <script type="text/javascript" src="scripts/db/Sys_Table.js"></script>
     <script type="text/javascript" src="scripts/dom/Portfolio_Item.js"></script>
     <script type="text/javascript" src="scripts/dom/Portfolio_Image.js"></script>
     <script type="text/javascript" src="scripts/dom/Menu_Item.js"></script>
@@ -86,15 +87,15 @@
           $("#img_grp").css("left", x+"px");
 
         db=new Db_Cache("webcaramel", 9, Db_Cache_Success);
-        function Db_Cache_Success()
+        function Db_Cache_Success(db)
         {
         	var portfolio_item_id;
         	
           Draw_Templates(db);
           
           portfolio_item_id = parseInt(Get_Request_Parameter("id"));
-          Portfolio_Item.Get_Portfolio_By_Id(db, portfolio_item_id, Get_Portfolio_By_Id_Success);
-          function Get_Portfolio_By_Id_Success(portfolio_item)
+          Portfolio_Item.Get_Portfolio_By_Id(db, portfolio_item_id, Success);
+          function Success(portfolio_item)
           {
             Draw_Portfolio_Image(db, "img_frame", portfolio_item);
             $("#portfolio_title").html(portfolio_item.title);
@@ -109,8 +110,8 @@
       {
         var portfolio_item_id;
 
-        portfolio_item.Get_Portfolio_Images(db, Get_Portfolio_Images_Success);
-        function Get_Portfolio_Images_Success(items)
+        portfolio_item.Get_Portfolio_Images(db, Success);
+        function Success(items)
         {
           var html;
 
@@ -124,8 +125,8 @@
 
       function Draw_Portfolio_Thumbnails(db, id, portfolio_item)
       {
-    	  portfolio_item.Get_Portfolio_Images(db, Get_Portfolio_Images_Success);
-        function Get_Portfolio_Images_Success(items)
+    	  portfolio_item.Get_Portfolio_Images(db, Success);
+        function Success(items)
         {
         	var html="", c;
         	
@@ -143,8 +144,8 @@
 
       function On_Thumbnail_Selected(this_elem, id)
       {
-        Portfolio_Image.Get_Portfolio_Image_By_Id(db, id, Get_Portfolio_Image_By_Id_Success);
-        function Get_Portfolio_Image_By_Id_Success(item)
+        Portfolio_Image.Get_Portfolio_Image_By_Id(db, id, Success);
+        function Success(item)
         {
           $("img.thumbnails").removeClass("img_selected");
           $(this_elem).addClass("img_selected");
