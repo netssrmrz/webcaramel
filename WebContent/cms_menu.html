@@ -4,6 +4,7 @@
   <head>
     <title>Web Caramel - Edit Menu</title>
     <link rel="stylesheet" href="styles/styles.css"/>
+    <link rel="stylesheet" href="styles/cms.css"/>
     <script type="text/javascript" src="scripts/jquery.js"></script>
     <script type="text/javascript" src="scripts/linq.js"></script>
     <script type="text/javascript" src="scripts/lib.js"></script>
@@ -19,165 +20,6 @@
     <script type="text/javascript" src="scripts/ui/Context_Menu.js"></script>
     <script type="text/javascript" src="scripts/ui/Edit_Dialog.js"></script>
     <script type="text/javascript" src="scripts/ui/Add_Dialog.js"></script>
-    <style>
-      #body_text
-      {
-        xtext-align: center;
-      }
-      
-      .table
-      {
-        margin-top: 16px;
-        margin-bottom: 16px;
-        margin-left: auto;
-        margin-right: auto;
-        padding: 0px;
-        border: 0px;
-        border-spacing: 0;
-        border-collapse: collapse;
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 13px;
-      }
-      .table .title
-      {
-        background-color: transparent;
-        color: #000;
-      }
-      .table thead tr
-      {
-        background-color: #555;
-        color: #fff;
-      }
-      .table thead th
-      {
-        margin: 0px;
-        padding-top: 8px;
-        padding-bottom: 8px;
-        padding-left: 16px;
-        padding-right: 16px;
-      }
-      .table .trOdd
-      {
-        xbackground-color: #fff;
-        xmargin: 0px;
-        xpadding: 0px;
-        xborder: 0px;
-        xborder-bottom: 1px solid #ccc;
-      }
-      .table tbody tr
-      {
-        xbackground-color: #eee;
-        xmargin: 0px;
-        xpadding: 0px;
-        xborder: 0px;
-        xborder-spacing: 0;
-        xborder-collapse: collapse;
-        border-bottom: 1px solid #eee;
-      }
-      .table tbody tr:hover
-      {
-        background-color: #cfc;
-        xcolor: #0f0;
-      }
-      .table td
-      {
-        margin: 0px;
-        padding-top: 4px;
-        padding-bottom: 4px;
-        padding-left: 16px;
-        padding-right: 16px;
-        xborder: 0px;
-        xborder-spacing: 0;
-        xborder-collapse: collapse;
-      }
-      
-      #context_menu
-      {
-        display: none; 
-        position: absolute;
-        background-color: rgba(0,0,0,0.8);
-        padding: 0px;
-        margin: 0px;
-        list-style-type: none;
-        box-shadow: 2px 2px 2px rgba(0,0,0,0.4);
-        border-top: 1px solid #999;
-        border-left: 1px solid #999;
-        border-bottom: 1px solid #222;
-        border-right: 1px solid #222;
-        z-index: 1;
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 10px;
-      }
-      #context_menu li
-      {
-        color: white;
-        padding-top: 5px;
-        padding-bottom: 5px;
-        padding-left: 10px;
-        padding-right: 10px;
-        margin: 0px;
-      }
-      #context_menu li:hover
-      {
-        background-color: rgba(0,255,0,0.2);
-      }
-      
-      .editFields
-      {
-        display: none; 
-        position: absolute;
-        background-color: rgba(0,0,0,0.8);
-        padding: 0px;
-        margin: 0px;
-        list-style-type: none;
-        box-shadow: 2px 2px 2px rgba(0,0,0,0.4);
-        border-top: 1px solid #999;
-        border-left: 1px solid #999;
-        border-bottom: 1px solid #222;
-        border-right: 1px solid #222;
-        z-index: 1;
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 13px;
-      }
-      .editFieldLabel
-      {
-        color: white;
-        padding-top: 5px;
-        padding-bottom: 5px;
-        padding-left: 10px;
-        padding-right: 5px;
-        margin: 0px;
-        display: inline-block;
-        width: 50px;
-        text-align: right;
-      }
-      .editFields input
-      {
-        width: 200px;
-        margin-top: 0px;
-        margin-bottom: 0px;
-        margin-left: 5px;
-        margin-right: 10px;
-        padding: 0px;
-      }
-      .dialogTitle
-      {
-        color: white;
-        padding-top: 5px;
-        padding-bottom: 5px;
-        padding-left: 10px;
-        padding-right: 10px;
-        margin: 0px;
-      }
-      .dialogButtons
-      {
-        padding-top: 5px;
-        padding-bottom: 5px;
-        padding-left: 10px;
-        padding-right: 10px;
-        margin: 0px;
-      }
-      </style>
     <script type="text/javascript">
     
       var db, menu_table, context_menu, edit_dlg, add_dlg;
@@ -192,7 +34,7 @@
         db=new Db_Cache("webcaramel", 9, Db_Init_Success, null);
       }
       
-      function Db_Init_Success()
+      function Db_Init_Success(db)
       {
    	    Draw_Header("header");
         Draw_Menu(db, "menu");
