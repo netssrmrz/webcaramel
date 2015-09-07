@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Web Caramel - Edit Portfolio</title>
+    <link rel="stylesheet" href="styles/styles.css"/>
+    <link rel="stylesheet" href="styles/cms.css"/>
+    <script type="text/javascript" src="scripts/jquery.js"></script>
+    <script type="text/javascript" src="scripts/linq.js"></script>
+    <script type="text/javascript" src="scripts/lib.js"></script>
+    <script type="text/javascript" src="scripts/db/Db_JSON.js"></script>
+    <script type="text/javascript" src="scripts/db/Db_Local.js"></script>
+    <script type="text/javascript" src="scripts/db/Db_Cache.js"></script>
+    <script type="text/javascript" src="scripts/db/Sys_Table.js"></script>
+    <script type="text/javascript" src="scripts/dom/Menu_Item.js"></script>
+    <script type="text/javascript" src="scripts/dom/Portfolio_Item.js"></script>
+    <script type="text/javascript" src="scripts/dom/Portfolio_Image.js"></script>
+    <script type="text/javascript" src="scripts/ui/templates.js"></script>
+    <script type="text/javascript" src="scripts/ui/Table.js"></script>
+    <script type="text/javascript" src="scripts/ui/Context_Menu.js"></script>
+    <script type="text/javascript" src="scripts/ui/Edit_Dialog.js"></script>
+    <script type="text/javascript" src="scripts/ui/Add_Dialog.js"></script>
+    <style>
+      .editFieldLabel
+      {
+        width: 100px;
+      }
+      </style>
+    <script type="text/javascript">
+    
+      var db, menu_table, context_menu, edit_dlg, add_dlg;
+        
+      function Body_On_Load()
+      {
+        portfolio_table = new Table("portfolio_table");
+        context_menu = new Context_Menu("context_menu");
+        edit_dlg = new Edit_Dialog("edit_dlg");
+        add_dlg = new Add_Dialog("add_dlg");
+
+        db=new Db_Cache("webcaramel", 9, Db_Init_Success, null);
+      }
+      
+      function Db_Init_Success(new_db)
+      {
+    	  db=new_db;
+        Draw_Header("header");
+        Draw_Menu(db, "menu");
+        Draw_Portfolio_Footer(db, "footer_content");
+        Draw_Footer(db, "footer_menu");
+        
+        Portfolio_Item.Get_Ids(db, Select_Portfolio_Ids_Success)
+      }
+
+      function Select_Portfolio_Ids_Success(ids)
+      {
+        // get filters
+        //filters=table_GetFilters();
+        
+        // apply filters
+        
+        // set filter desc
+        
+        // display menu items
+        portfolio_table.Set_Items(ids);
+      }
+
+      function Update_Portfolio_Row(row, id)
+      {
+    	  Portfolio_Item.Get_Portfolio_By_Id(db, id, 
+        function Success(obj)
+        {
+          row.children("td[colid=title]").html(ToString(obj.title));
+          row.children("td[colid=order]").html(ToString(obj.recent_order));
+          row.children("td[colid=url]").html(ToString(obj.website_url));
+        });
+      }
+
+      // Context Menu =============================================================
+
+      function contextMenu_EditItem(id)
+      {
+    	  Portfolio_Item.Get_Portfolio_By_Id(db, parseInt(id), //Success);
+        function Success(obj)
+        {
+          edit_dlg.Show(obj);
+        });
+      }
+
+      function contextMenu_DeleteItem(obj_id)
+      {
+        db.Delete("Menu_Item", parseInt(obj_id), Db_Init_Success);
+      }
+      
+      // Edit Dialog =======================================================
+
+      function editDlg_Save(obj)
+      {
+        db.Save("Menu_Item", obj, Db_Init_Success);
+      }
+      
+      // Add Dialog =======================================================
+
+      function addDlg_Save(obj)
+      {
+        db.Save("Menu_Item", obj, Db_Init_Success);
+      }
+
+    </script>
+    </head>
+
+  <body onload="Body_On_Load()">
+
+    <!-- Add Dialog ================================================================================================== -->
+
+    <div id="add_dlg" class="editFields">
+      <div class="dialogTitle">Add Menu Item</div>
+      <div>
+        <div class="editFieldLabel">Title</div>
+        <input id="editFields_title" type="text" objfield="title" />
+        </div>
+      <div>
+        <div class="editFieldLabel">Caption</div>
+        <input id="editFields_caption" type="text" objfield="caption" />
+        </div>
+      <div>
+        <div class="editFieldLabel">URL</div>
+        <input id="editFields_url" type="text" objfield="url">
+        </div>
+      <div class="dialogButtons">
+        <button onclickcancel>Cancel</button>
+        <button onclicksave="addDlg_Save">Save</button>
+        </div>
+      </div>
+
+    <!-- Edit Dialog ================================================================================================== -->
+
+    <div id="edit_dlg" class="editFields" style="width:900px;height:500px;">
+      <div class="dialogTitle">Edit Potfolio Item</div>
+      <div>
+        <div class="editFieldLabel">Title</div>
+        <input id="editFields_title" type="text" objfield="title" />
+        </div>
+      <div>
+        <div class="editFieldLabel">Display Order</div>
+        <input id="editFields_caption" type="text" objfield="recent_order" />
+        </div>
+      <div>
+        <div class="editFieldLabel">Website URL</div>
+        <input id="editFields_url" type="text" objfield="website_url">
+        </div>
+      <div>
+        <div class="editFieldLabel">Description</div>
+        <textarea id="editFields_url" objfield="description" cols="90" rows="20" style="resize:none;"></textarea>
+        </div>
+      <div class="dialogButtons">
+        <button onclickcancel>Cancel</button>
+        <button onclicksave="editDlg_Save">Save</button>
+        </div>
+      </div>
+
+    <!-- Context Menu ================================================================================================== -->
+
+    <ul id="context_menu" class="contextMenu">
+      <li id="contextMenu_Add" adddlgid="add_dlg">Add</li>
+      <li id="contextMenu_Edit" onedititem="contextMenu_EditItem">Edit</li>
+      <li id="contextMenu_Del" ondeleteitem="contextMenu_DeleteItem">Delete</li>
+      </ul>
+
+    <!-- Page Content ================================================================================================== -->
+
+    <div id="header"></div>
+    <div id="menu"></div>
+
+    <div id="body">
+      <div id="body_text">
+
+        <table id="portfolio_table" onupdaterow="Update_Portfolio_Row" contextmenu="context_menu" class="table">
+          <thead>
+            <tr class="title"><th colspan="4"><h1>Portfolio Items</h1></th></tr>
+            <tr><th>No.</th><th colid="title">Title</th><th colid="order">Order</th><th colid="url">URL</th></tr>
+            </thead>
+          <tbody>
+            </tbody>
+        </table>
+        
+        <h1>Instructions</h1>
+        <p>To Add a Menu Item - Click on any row to display the menu and select "Add".</p>
+        <p>To Edit a Menu Item - Click on the row of the menu item you wish to change and select "Edit" from the menu.</p>
+        <p>To Delete a Menu Item - Click on the row of the menu item you wish to delete and select "Delete" from the menu.</p>
+        
+        <h1>Notes</h1>
+        <p>The "Title" and "Caption" fields can include any HTML as part of the text.</p>
+        <p>The "URL" field must contain a full URL if the link is that of an external site. For example, a link to the Google website should look like "http://www.google.com".
+        Internal links to local website pages do not require a full URL. For example, a link to the home page could look like "index.html".</p>
+
+        </div>
+    </div>
+
+    <div id="footer_content"></div>
+    <div id="footer_menu"></div>
+
+    </body>
+
+  </html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Web Caramel - CMS Administration Options</title>
+    <link rel="stylesheet" href="styles/styles.css"/>
+    <script type="text/javascript" src="scripts/jquery.js"></script>
+    <script type="text/javascript" src="scripts/linq.js"></script>
+    <script type="text/javascript" src="scripts/lib.js"></script>
+    <script type="text/javascript" src="scripts/db/Db_JSON.js"></script>
+    <script type="text/javascript" src="scripts/db/Db_Local.js"></script>
+    <script type="text/javascript" src="scripts/db/Db_Cache.js"></script>
+    <script type="text/javascript" src="scripts/db/Sys_Table.js"></script>
+    <script type="text/javascript" src="scripts/dom/Menu_Item.js"></script>
+    <script type="text/javascript" src="scripts/dom/Portfolio_Item.js"></script>
+    <script type="text/javascript" src="scripts/dom/Portfolio_Image.js"></script>
+    <script type="text/javascript" src="scripts/ui/templates.js"></script>
+    <script type="text/javascript" src="scripts/ui/Table.js"></script>
+    <script type="text/javascript" src="scripts/ui/Context_Menu.js"></script>
+    <script type="text/javascript" src="scripts/ui/Edit_Dialog.js"></script>
+    <script type="text/javascript" src="scripts/ui/Add_Dialog.js"></script>
+    <style>
+      #body_text
+      {
+        padding-top: 32px;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 13px;
+      }
+      </style>
+    <script type="text/javascript">
+      var db;
+    
+      function Body_On_Load()
+      {
+        db=new Db_Cache("webcaramel", 9, //Success);
+        function Success()
+        {
+          Draw_Header("header");
+          Draw_Menu(db, "menu");
+          Draw_Portfolio_Footer(db, "footer_content");
+          Draw_Footer(db, "footer_menu");
+        });
+        
+        $("#host").val(localStorage["ftp.host"]);
+        $("#login").val(localStorage["ftp.login"]);
+        $("#password").val(localStorage["ftp.password"]);
+      }
+      
+      function Publish()
+      {
+        db.host=$("#host").val();
+        db.user_name=$("#login").val();
+        db.password=$("#password").val();
+        db.Publish_Table("Menu_Item", //Success);
+        function Success(ftp_res)
+        {
+        	var msg;
+        	
+        	if (ftp_res=="OK")
+        	{
+        		msg="I have succesfully published your changes.";
+        		
+            localStorage["ftp.host"]=$("#host").val();
+            localStorage["ftp.login"]=$("#login").val();
+            localStorage["ftp.password"]=$("#password").val();
+        	}
+        	else
+        		msg="I encountered a problem and wasn't able to publish your changes. The following details may help diagnose the problem: '"+ftp_res+"'";
+        	alert(msg);
+        });
+      }
+      
+      function Clear()
+      {
+    	  db.Clear_Changes(//Success);
+    	  function Success()
+    	  {
+    		  alert("All your changes have been deleted.");
+    		  Body_On_Load();
+    	  });
+      }
+      </script>
+    </head>
+
+  <body onload="Body_On_Load()">
+    <div id="header"></div>
+    <div id="menu"></div>
+
+    <div id="body">
+      <div id="body_text">
+        <button onclick="Publish()">Publish</button>
+        <button onclick="Clear()">Clear All Changes</button>
+        <button onclick="window.open('cms_menu.html', '_self')">Edit Menus</button>
+        <button onclick="window.open('cms_portfolio.html', '_self')">Edit Menus</button>
+        <hr>
+        <table>
+          <tr><td>FTP Host</td><td><input id="host" type="text" value=""></td></tr>
+          <tr><td>FTP Login</td><td><input id="login" type="text" value=""></td></tr>
+          <tr><td>FTP Password</td><td><input id="password" type="text" value=""></td></tr>
+          </table>
+          
+        <h1>Instructions</h1>
+        <p>To Publish all Changes - make sure you have entered the correct FTP login details and click the "Publish" button. Be aware that this will overwrite all menu items
+        on the main website with those on your version of the website. You may wish to backup the "db/Menu_Item.json" file first as this contains all the data for the menu items.
+        Also, the FTP login details will be automatically saved on your PC and will not be visible to anyone else.</p>
+        <p>To Clear all Changes - click the "Clear All Changes" button. This will delete any changes you have made to menus on your local website version and in no way affects
+        the main website.</p>
+        <p>To Edit Menu Items - select the "Edit Menus" button. This will take you to another page where you can create, alter, or delete menu items. These changes will only be 
+        visible to you until you click the "Publish" button.</p>
+        
+        <h1>Notes</h1>
+        <p>The "Publish" function relies on an FTP Java applet to work correctly. Please be sure to allow this applet to run when your browser asks for permission.</p>
+        </div>
+      </div>
+      
+    <applet id="ftp_buddy" code = "rs.ftp_buddy.Applet_Main" archive = "scripts/FTPBuddy.jar" style="visibility:hidden;position:absolute;top:0px;left:0px;">
+      <param name="permissions" value="sandbox" />
+      </applet>    
+
+    <div id="footer_content"></div>
+    <div id="footer_menu"></div>
+    </body>
+
+  </html>
+    
